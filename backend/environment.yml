@@ -19,7 +19,11 @@ dependencies:
   - xz=5.2.5=h1de35cc_0
   - zlib=1.2.11=h1de35cc_3
   - pip:
+    - beautifulsoup4==4.9.1
     - httplib2==0.18.1
+    - lxml==4.5.2
     - oauth2==1.9.0.post1
     - python-dotenv==0.14.0
+    - soupsieve==2.0.1
 prefix: /opt/anaconda3/envs/yibu_conda
+
