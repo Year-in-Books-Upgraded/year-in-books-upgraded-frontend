@@ -119,11 +119,9 @@ class Server:
         #print(content)
         return (content)
 
-
-    def get_year_data(self, year, xml_content):
-        print(f'==={year}====')
+    # Get all reviews from Goodreads API
+    def goodreads_get_year_data(self, year, xml_content):
         reviews_xml = soup(xml_content, 'xml')
-        total_books = reviews_xml.reviews['total']
         all_reviews_xml = reviews_xml.reviews.find_all('review')
 
         reviews = []
@@ -132,15 +130,39 @@ class Server:
                 'title' : review_xml.title_without_series.contents[0],
                 'author' : [author.find('name').contents[0] for author in review_xml.authors.findAll('author')],
                 'gr_link' : review_xml.link.contents[0],
-                'num_pages' : review_xml.num_pages.contents[0] if review_xml.num_pages.contents else 0,
-                'num_reads' : review_xml.ratings_count.contents[0],
-                'avg_rating' : review_xml.average_rating.contents[0],
                 'cover' : review_xml.image_url.contents[0],
-                'your_rating' : review_xml.rating.contents[0]
+                'num_pages' : int(review_xml.num_pages.contents[0]) if review_xml.num_pages.contents else 0,
+                'num_reads' : int(review_xml.ratings_count.contents[0]),
+                'avg_rating' : float(review_xml.average_rating.contents[0]),
+                'your_rating' : float(review_xml.rating.contents[0])
             }
             reviews.append(review)
 
-        return (total_books, reviews)
+        return reviews
+
+    # Process data from Goodreads
+    def get_year_data(self, year, xml_content):
+        reviews = self.goodreads_get_year_data(year, xml_content)
+        sorted_by_pages = sorted(reviews, key=lambda x: x['num_pages'])
+        sorted_by_reads = sorted(reviews, key=lambda x: x['num_reads'])
+        sorted_by_rating = sorted(reviews, key=lambda x: x['avg_rating'], reverse=True)
+
+        year_data = {
+            'total_books' : len(reviews),
+            'total_pages' : sum(review['num_pages'] for review in reviews),
+            'avg_pages' : round(sum(review['num_pages'] for review in reviews) / len(reviews)),
+            'avg_rating' : round((sum(review['your_rating'] for review in reviews) / len(reviews)), 2),
+            'first_book' : reviews[0],
+            'last_book': reviews[-1],
+            'shortest_book' : next(review for review in sorted_by_pages if review['num_pages'] > 0),
+            'longest_book' : sorted_by_pages[-1],
+            'highest_rated_book' : sorted_by_rating[0],
+            'least_read_book' : sorted_by_reads[0],
+            'most_read_book' : sorted_by_reads[-1],
+            'reviews' : reviews
+        }
+
+        return year_data
 
 
 def main():
@@ -149,7 +171,7 @@ def main():
     user_id, user_name = server.goodreads_get_user_id()  # get user's Goodreads ID for use in some API queries
     year_joined, profile_image, profile_url = server.goodreads_get_user_info(user_id)
     current_year = date.today().year
-    all_years = list(range(int(year_joined), current_year+1)) # years user can choose from sidebar menu
+    all_years = [2018] #list(range(int(year_joined), current_year+1)) # years user can choose from sidebar menu
     for year in all_years:
         content = server.goodreads_get_read_shelf(year)
         year_data = server.get_year_data(year, content)
