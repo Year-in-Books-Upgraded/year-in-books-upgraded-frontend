@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 from bs4 import BeautifulSoup as soup
-from datetime import date
 
 
 class Server:
@@ -106,9 +105,6 @@ class Server:
         year_joined = user_xml.joined.contents[0].split('/')[1]
         profile_image = user_xml.image_url.contents[0]
         profile_url = user_xml.link.contents[0]
-        # print(year_joined)
-        # print(profile_image)
-        # print(profile_url)
         return (year_joined, profile_image, profile_url)
 
     # Get books on user's read shelf (GET /review/list.xml?v=2, params = (shelf, sort, read_at))
@@ -116,7 +112,7 @@ class Server:
         response, content = self.client.request('%s/review/list.xml?v=2&shelf=read&sort=date_read&read_at=%s&per_page=200' % (self.goodreads_url, year), 'GET')
         if response['status'] != '200':
            raise Exception('Cannot fetch resource: %s' % response['status'])
-        #print(content)
+        # print(content)
         return (content)
 
     # Get all reviews from Goodreads API
@@ -148,6 +144,7 @@ class Server:
         sorted_by_rating = sorted(reviews, key=lambda x: x['avg_rating'], reverse=True)
 
         year_data = {
+            'year' : year,
             'total_books' : len(reviews),
             'total_pages' : sum(review['num_pages'] for review in reviews),
             'avg_pages' : round(sum(review['num_pages'] for review in reviews) / len(reviews)),
@@ -163,19 +160,6 @@ class Server:
         }
 
         return year_data
-
-
-def main():
-    server = Server()  # initialize server
-    server.authenticate_user()  # establishes client with user access
-    user_id, user_name = server.goodreads_get_user_id()  # get user's Goodreads ID for use in some API queries
-    year_joined, profile_image, profile_url = server.goodreads_get_user_info(user_id)
-    current_year = date.today().year
-    all_years = [2018] #list(range(int(year_joined), current_year+1)) # years user can choose from sidebar menu
-    for year in all_years:
-        content = server.goodreads_get_read_shelf(year)
-        year_data = server.get_year_data(year, content)
-        print(f'{year}\n\n{year_data}')
 
 
 if __name__ == '__main__':
