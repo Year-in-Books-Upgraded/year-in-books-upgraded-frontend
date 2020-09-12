@@ -4,9 +4,14 @@ channels:
 dependencies:
   - ca-certificates=2020.7.22=0
   - certifi=2020.6.20=py38_0
+  - click=7.1.2=py_0
+  - flask=1.1.2=py_0
+  - itsdangerous=1.1.0=py_0
+  - jinja2=2.11.2=py_0
   - libcxx=10.0.0=1
   - libedit=3.1.20191231=h1de35cc_1
   - libffi=3.3=hb1e8313_2
+  - markupsafe=1.1.1=py38h1de35cc_1
   - ncurses=6.2=h0a44026_1
   - openssl=1.1.1g=h1de35cc_0
   - pip=20.2.2=py38_0
@@ -15,11 +20,14 @@ dependencies:
   - setuptools=49.6.0=py38_0
   - sqlite=3.33.0=hffcf06c_0
   - tk=8.6.10=hb0a8c7a_0
+  - werkzeug=1.0.1=py_0
   - wheel=0.35.1=py_0
   - xz=5.2.5=h1de35cc_0
   - zlib=1.2.11=h1de35cc_3
   - pip:
     - beautifulsoup4==4.9.1
+    - cachelib==0.1.1
+    - flask-session==0.3.2
     - httplib2==0.18.1
     - lxml==4.5.2
     - oauth2==1.9.0.post1
