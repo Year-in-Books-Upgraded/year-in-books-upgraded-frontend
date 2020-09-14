@@ -50,7 +50,7 @@ def goodreads_auth_callback(request_token, request_token_secret):
              raise Exception('Invalid response: %s' % response['status'])
 
          access_token = dict(urllib.parse.parse_qsl(content))
-         print(access_token)
+         # print(access_token)
 
          # > Decode bytes into strings (for access token)
          access_token_decoded = {}
@@ -59,16 +59,11 @@ def goodreads_auth_callback(request_token, request_token_secret):
          print(access_token_decoded)
          access_token = access_token_decoded['oauth_token']
          access_secret = access_token_decoded['oauth_token_secret']
-         access_token = os.getenv('GR_ACCESS_TOKEN')
-         access_secret = os.getenv('GR_ACCESS_SECRET')
 
-         # > Save token for future use
-         # print('Save this for later: ')
-         # print('oauth token key:    ' + access_token_decoded['oauth_token'])
-         # print('oauth token secret: ' + access_token_decoded['oauth_token_secret'])
          token = oauth.Token(access_token, access_secret) # this has the access token for the user
-
          client = oauth.Client(consumer, token)  # client that has the access token!
+         return (access_token, access_secret, client)
+
      else:
          return None
 
@@ -76,7 +71,7 @@ def goodreads_auth_callback(request_token, request_token_secret):
 # ** GOODREADS API METHODS **
 
 # Ask for user ID (GET /api/auth_user)
-def goodreads_get_user_id():
+def goodreads_get_user_id(client):
     response, content = client.request('%s/api/auth_user' % goodreads_url,'GET')
     if response['status'] != '200':
        raise Exception('Cannot fetch resource: %s' % response['status'])
@@ -87,8 +82,9 @@ def goodreads_get_user_id():
     # print(user_name)
     return user_id, user_name
 
+
 # Get info about user (GET /user/show, params = (id))
-def goodreads_get_user_info(user_id):
+def goodreads_get_user_info(client, user_id):
     response, content = client.request('%s/user/show/%s.xml' % (goodreads_url, user_id), 'GET')
     if response['status'] != '200':
        raise Exception('Cannot fetch resource: %s' % response['status'])
@@ -99,16 +95,18 @@ def goodreads_get_user_info(user_id):
     profile_url = user_xml.link.contents[0]
     return (year_joined, profile_image, profile_url)
 
+
 # Get books on user's read shelf (GET /review/list.xml?v=2, params = (shelf, sort, read_at))
-def goodreads_get_read_shelf(year):
+def goodreads_get_read_shelf(client, year):
     response, content = client.request('%s/review/list.xml?v=2&shelf=read&sort=date_read&read_at=%s&per_page=200' % (goodreads_url, year), 'GET')
     if response['status'] != '200':
        raise Exception('Cannot fetch resource: %s' % response['status'])
     # print(content)
     return (content)
 
-# Get all reviews from Goodreads API
-def goodreads_get_year_data(year, xml_content):
+
+# Process all reviews from the read shelf data
+def goodreads_process_reviews(xml_content):
     reviews_xml = soup(xml_content, 'xml')
     all_reviews_xml = reviews_xml.reviews.find_all('review')
 
@@ -128,27 +126,32 @@ def goodreads_get_year_data(year, xml_content):
 
     return reviews
 
-# Process data from Goodreads
+
+# Process all data for given year
 def get_year_data(year, xml_content):
-    reviews = goodreads_get_year_data(year, xml_content)
-    sorted_by_pages = sorted(reviews, key=lambda x: x['num_pages'])
-    sorted_by_reads = sorted(reviews, key=lambda x: x['num_reads'])
-    sorted_by_rating = sorted(reviews, key=lambda x: x['avg_rating'], reverse=True)
+    reviews = goodreads_process_reviews(xml_content)
 
-    year_data = {
-        'year' : year,
-        'total_books' : len(reviews),
-        'total_pages' : sum(review['num_pages'] for review in reviews),
-        'avg_pages' : round(sum(review['num_pages'] for review in reviews) / len(reviews)),
-        'avg_rating' : round((sum(review['your_rating'] for review in reviews) / len(reviews)), 2),
-        'first_book' : reviews[0],
-        'last_book': reviews[-1],
-        'shortest_book' : next(review for review in sorted_by_pages if review['num_pages'] > 0),
-        'longest_book' : sorted_by_pages[-1],
-        'highest_rated_book' : sorted_by_rating[0],
-        'least_read_book' : sorted_by_reads[0],
-        'most_read_book' : sorted_by_reads[-1],
-        'reviews' : reviews
-    }
+    if reviews:
+        sorted_by_pages = sorted(reviews, key=lambda x: x['num_pages'])
+        sorted_by_reads = sorted(reviews, key=lambda x: x['num_reads'])
+        sorted_by_rating = sorted(reviews, key=lambda x: x['avg_rating'], reverse=True)
 
-    return year_data
+        year_data = {
+            'year' : year,
+            'total_books' : len(reviews),
+            'total_pages' : sum(review['num_pages'] for review in reviews),
+            'avg_pages' : round(sum(review['num_pages'] for review in reviews) / len(reviews)),
+            'avg_rating' : round((sum(review['your_rating'] for review in reviews) / len(reviews)), 2),
+            'first_book' : reviews[0],
+            'last_book': reviews[-1],
+            'shortest_book' : next(review for review in sorted_by_pages if review['num_pages'] > 0),  # some books have zero pages (ex. ongoing webcomics)
+            'longest_book' : sorted_by_pages[-1],
+            'highest_rated_book' : sorted_by_rating[0],
+            'least_read_book' : sorted_by_reads[0],
+            'most_read_book' : sorted_by_reads[-1],
+            'reviews' : reviews
+        }
+        return year_data
+
+    else:
+        return None
