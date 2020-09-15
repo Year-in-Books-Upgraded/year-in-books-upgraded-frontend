@@ -42,30 +42,31 @@ def goodreads_create_auth_url():
 
 def goodreads_auth_callback(request_token, request_token_secret):
     if request_token and request_token_secret:
-         token = oauth.Token(request_token, request_token_secret)  # request token, will get access token from this
+        consumer = oauth.Consumer(key=os.getenv('GR_CLIENT_KEY'), secret=os.getenv('GR_CLIENT_SECRET'))
+        token = oauth.Token(request_token, request_token_secret)  # request token, will get access token from this
 
-         client = oauth.Client(consumer, token)  # client still using request token
-         response, content = client.request(access_token_url, 'POST')
-         if response['status'] != '200':
-             raise Exception('Invalid response: %s' % response['status'])
+        client = oauth.Client(consumer, token)  # client still using request token
+        response, content = client.request(access_token_url, 'POST')
+        if response['status'] != '200':
+            raise Exception('Invalid response: %s' % response['status'])
 
-         access_token = dict(urllib.parse.parse_qsl(content))
-         # print(access_token)
+        access_token = dict(urllib.parse.parse_qsl(content))
+        # print(access_token)
 
-         # > Decode bytes into strings (for access token)
-         access_token_decoded = {}
-         for key, value in access_token.items():
-             access_token_decoded[key.decode('utf-8')] = value.decode('utf-8')
-         print(access_token_decoded)
-         access_token = access_token_decoded['oauth_token']
-         access_secret = access_token_decoded['oauth_token_secret']
+        # > Decode bytes into strings (for access token)
+        access_token_decoded = {}
+        for key, value in access_token.items():
+            access_token_decoded[key.decode('utf-8')] = value.decode('utf-8')
+        print(access_token_decoded)
+        access_token = access_token_decoded['oauth_token']
+        access_secret = access_token_decoded['oauth_token_secret']
+        token = oauth.Token(access_token, access_secret) # this has the access token for the user
+        client = oauth.Client(consumer, token)  # client that has the access token!
+        return (access_token, access_secret, client)
 
-         token = oauth.Token(access_token, access_secret) # this has the access token for the user
-         client = oauth.Client(consumer, token)  # client that has the access token!
-         return (access_token, access_secret, client)
-
-     else:
-         return None
+    else:
+        print('oh no, getting access token failed.')
+        return None
 
 
 # ** GOODREADS API METHODS **
@@ -144,7 +145,7 @@ def get_year_data(year, xml_content):
             'avg_rating' : round((sum(review['your_rating'] for review in reviews) / len(reviews)), 2),
             'first_book' : reviews[0],
             'last_book': reviews[-1],
-            'shortest_book' : next(review for review in sorted_by_pages if review['num_pages'] > 0),  # some books have zero pages (ex. ongoing webcomics)
+            'shortest_book' : next(review for review in sorted_by_pages if review['num_pages'] > 0),  # books with 0 pages (ex. webcomics)
             'longest_book' : sorted_by_pages[-1],
             'highest_rated_book' : sorted_by_rating[0],
             'least_read_book' : sorted_by_reads[0],

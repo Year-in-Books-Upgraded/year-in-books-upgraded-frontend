@@ -2,37 +2,37 @@ import server
 import os
 from datetime import date
 from dotenv import load_dotenv
-from pymongo import MongoClient
 from flask import Flask, jsonify, redirect, session
 from flask_session import Session
+from flask_cors import CORS
 
 load_dotenv()
 
-# Set up Mongo connection
-mongo_client = MongoClient(os.getenv('MONGO_URI'))
-mongo_db = mongo_client['yibu']
-mongo_col = mongo_db['goodreads_users']
-
 # Set up Flask app with flask-session
 app = Flask(__name__)
-app.secret_key = os.getenv('FLASK_SECRET_KEY')
+app.secret_key = b'Fq67RS192XefqSmEjo323jgow'
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
+CORS(app)
 
 
 # Initial route: get Goodreads authentication URL
-@app.route('/')
+@app.route('/login')
 def authenticate():
     auth_url, request_token, request_token_secret = server.goodreads_create_auth_url()  # get Goodreads auth URL + request token
     session['request_token'] = request_token
     session['request_token_secret'] = request_token_secret
-    return auth_url
+    response = jsonify(auth_url)
+    response.headers.add('Access-Control-Allow-Headers',
+                         "Origin, X-Requested-With, Content-Type, Accept, x-auth")
+    return response
 
 # Callback route: get user's access token to get data from Goodreads
 @app.route('/callback')
 def callback():
-    request_token = session.get('request_token', None)
-    request_token_secret = session.get('request_token_secret', None)
+    request_token = session.get('request_token')
+    request_token_secret = session.get('request_token_secret')
+    print(session.get('request_token'), session.get('request_token_secret'))
     access_token, access_secret, client = server.goodreads_auth_callback(request_token, request_token_secret)
 
     if client:

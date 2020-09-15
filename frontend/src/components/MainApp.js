@@ -5,7 +5,7 @@ class SideBar extends Component {
         return (
             <div className="sidebar">
                 <div className="pic">
-                    sidebar
+                    {this.props.user_name}
                 </div>
             </div>
         );
@@ -147,25 +147,19 @@ class CoversPage extends Component {
 class MainApp extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            year: 2020,
-            total_pages: 2500,
-            total_books: 30,
-            average_rating: 3.3
-        }
+        console.log(props)
     }
-
 
     render() {
         return (
             <div>
-                <SideBar />
-                <SummaryPage {...this.state} />
-                <PagesPage />
-                <StarsPage />
-                <PopularityPage />
-                <CoversPage />
+                <p>OK</p>                
+                // <SideBar {...this.props} />
+                // <SummaryPage year={this.props.current_year} />
+                // <PagesPage {...this.props} />
+                // <StarsPage {...this.props} />
+                // <PopularityPage {...this.props} />
+                // <CoversPage {...this.props} />
             </div>
         )
     }
