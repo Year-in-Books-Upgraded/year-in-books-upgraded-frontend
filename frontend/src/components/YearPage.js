@@ -144,7 +144,7 @@ class CoversPage extends Component {
 
 }
 
-class MainApp extends Component {
+class YearPage extends Component {
     constructor(props) {
         super(props);
         console.log(props)
@@ -153,16 +153,15 @@ class MainApp extends Component {
     render() {
         return (
             <div>
-                <p>OK</p>                
-                // <SideBar {...this.props} />
-                // <SummaryPage year={this.props.current_year} />
-                // <PagesPage {...this.props} />
-                // <StarsPage {...this.props} />
-                // <PopularityPage {...this.props} />
-                // <CoversPage {...this.props} />
+                <SideBar {...this.props} />
+                <SummaryPage year={this.props.current_year} />
+                <PagesPage {...this.props} />
+                <StarsPage {...this.props} />
+                <PopularityPage {...this.props} />
+                <CoversPage {...this.props} />
             </div>
         )
     }
 }
 
-export default MainApp;
+export default YearPage;
