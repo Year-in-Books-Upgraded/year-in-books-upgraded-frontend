@@ -42,18 +42,14 @@ class SummaryPage extends Component {
                 <div className="background-section-wrapper first-last-wrapper">
                     <div className="first-last-content flexing">
                         <div className="first-book flexing">
-                            <div className="inner-wrapper">
-                                <p className="section-title">&#9632; First Book &#9632;</p>
-                                <a href={this.props.first_book.gr_link}><img src={this.props.first_book.cover} alt={this.props.first_book.title}/></a>
-                                <p><i>{this.props.first_book.title}</i><br/>{this.props.first_book.author}</p>
-                            </div>
+                            <p className="section-title">&#9632; First Book &#9632;</p>
+                            <a href={this.props.first_book.gr_link}><img src={this.props.first_book.cover} alt={this.props.first_book.title}/></a>
+                            <p><i>{this.props.first_book.title}</i><br/>{this.props.first_book.author}</p>
                         </div>
                         <div className="last-book flexing">
-                            <div className="inner-wrapper">
-                                <p className="section-title">&#9632; Last Book &#9632;</p>
-                                <a href={this.props.last_book.gr_link}><img src={this.props.last_book.cover} alt={this.props.last_book.cover} /></a>
-                                <p><i>{this.props.last_book.title}</i><br/>{this.props.last_book.author}</p>
-                            </div>
+                            <p className="section-title">&#9632; Last Book &#9632;</p>
+                            <a href={this.props.last_book.gr_link}><img src={this.props.last_book.cover} alt={this.props.last_book.cover} /></a>
+                            <p><i>{this.props.last_book.title}</i><br/>{this.props.last_book.author}</p>
                         </div>
                     </div>
                 </div>
@@ -116,8 +112,11 @@ class StarsPage extends Component {
                 </div>
                 <div className="background-section-wrapper highest-rated-wrapper">
                     <div className="highest-rated-content flexing">
-                        <div className="highest-rated-title">
-                            highest rated
+                        <div className="highest-rated flexing">
+                            <a href={this.props.highest_rated.gr_link}><img src={this.props.highest_rated.cover} alt={this.props.highest_rated.title}/></a>
+                            <p><i>{this.props.highest_rated.title}</i><br/>{this.props.highest_rated.author}</p>
+                            <p className="section-title">&#9632; Highest Rated on Goodreads &#9632;</p>
+                            <p>{this.props.highest_rated.avg_rating} stars<br/>{this.props.highest_rated.num_reads} ratings</p>
                         </div>
                     </div>
                 </div>
@@ -174,7 +173,8 @@ class YearPage extends Component {
             'last_book' : {},
             'shortest_book' : {},
             'longest_book' : {},
-            'average_pages' : 0
+            'average_pages' : 0,
+            'highest_rated' : {}
         }
     }
 
@@ -192,6 +192,7 @@ class YearPage extends Component {
         this.setState( { 'shortest_book' : current_year_data['shortest_book'] } ) ;
         this.setState( { 'longest_book' : current_year_data['longest_book'] } ) ;
         this.setState( { 'average_pages' : current_year_data['avg_pages'] } );
+        this.setState( { 'highest_rated' : current_year_data['highest_rated_book'] } );
     }
 
     render() {
@@ -201,7 +202,7 @@ class YearPage extends Component {
                 <SummaryPage year={this.props.match.params.current_year} total_pages={this.state.total_pages} total_books={this.state.total_books}
                 average_rating={this.state.average_rating} first_book={this.state.first_book} last_book={this.state.last_book}/>
                 <PagesPage shortest_book={this.state.shortest_book} longest_book={this.state.longest_book} average_pages={this.state.average_pages}/>
-                <StarsPage {...this.props} />
+                <StarsPage highest_rated={this.state.highest_rated} />
                 <PopularityPage {...this.props} />
                 <CoversPage {...this.props} />
             </div>

@@ -136,20 +136,17 @@ body
             flex-direction: column
             height: 100%
             width: 100%
-            div.inner-wrapper
-                width: 90%
-            p.section-title
-                font-size: 1.5em
-            .first-book
+            .first-book, .last-book
                 background-color: #F9F0E4
                 width: 85%
                 height: 42%
+                flex-direction: column
+                .section-title
+                    font-size: 1.5em
+            .first-book
                 margin-bottom: 5%
             .last-book
-                 background-color: #F9F0E4
-                 width: 85%
-                 height: 42%
-                 margin-top: 5%
+                margin-top: 5%
 
 .pages-page
     .content-wrapper
@@ -216,10 +213,14 @@ body
             flex-direction: column
             height: 100%
             width: 100%
-            .highest-rated-title
+            .highest-rated
+                color: #F9F0E4
                 background-color: #393734
                 width: 75%
                 height: 80%
+                flex-direction: column
+                .section-title
+                    font-size: 1.5em
 
 .popularity-page
     .popularity-wrapper
