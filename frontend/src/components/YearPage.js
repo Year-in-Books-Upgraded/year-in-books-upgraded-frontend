@@ -19,21 +19,21 @@ class SummaryPage extends Component {
                 <div className="background-section-wrapper summary-wrapper">
                     <div className="summary-content">
                         <div>
-                            <h2>
+                            <h2 className="title">
                                 Your Year in Books
                             </h2>
                         </div>
                         <div>
-                            <h1>{this.props.year}</h1>
+                            <h1 className="year">{this.props.year}</h1>
                         </div>
                         <div className="divider">&nbsp;
                         </div>
-                        <div>
+                        <div className="stats">
                             <p>
-                                {this.props.total_pages} pages across {this.props.total_books} books
+                                <b>{this.props.total_pages}</b> pages across <b>{this.props.total_books}</b> books
                             </p>
                             <p>
-                                Average rating {this.props.average_rating} stars
+                                Average rating <b>{this.props.average_rating} &#9733;</b>
                             </p>
                         </div>
                     </div>
@@ -41,11 +41,19 @@ class SummaryPage extends Component {
 
                 <div className="background-section-wrapper first-last-wrapper">
                     <div className="first-last-content flexing">
-                        <div className="first-book">
-                            first book
+                        <div className="first-book flexing">
+                            <div className="inner-wrapper">
+                                <p className="section-title">&#9632; First Book &#9632;</p>
+                                <a href={this.props.first_book.gr_link}><img src={this.props.first_book.cover} alt={this.props.first_book.title}/></a>
+                                <p><i>{this.props.first_book.title}</i><br/>{this.props.first_book.author}</p>
+                            </div>
                         </div>
-                        <div className="last-book">
-                            last book
+                        <div className="last-book flexing">
+                            <div className="inner-wrapper">
+                                <p className="section-title">&#9632; Last Book &#9632;</p>
+                                <a href={this.props.last_book.gr_link}><img src={this.props.last_book.cover} alt={this.props.last_book.cover} /></a>
+                                <p><i>{this.props.last_book.title}</i><br/>{this.props.last_book.author}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -147,14 +155,36 @@ class CoversPage extends Component {
 class YearPage extends Component {
     constructor(props) {
         super(props);
-        console.log(props)
+        this.state = {
+            'all_years' : [],
+            'total_books' : 0,
+            'total_pages' : 0,
+            'average_rating' : 0,
+            'first_book' : {},
+            'last_book' : {}
+        }
+    }
+
+    componentDidMount() {
+        let current_year = this.props.match.params.current_year;
+        let user_data = JSON.parse(sessionStorage.getItem('user_data'));
+        this.setState( { 'all_years' : user_data.all_years } );
+        // summary page
+        let current_year_data = user_data['all_year_data'].find(x => x['year'] === parseInt(current_year))
+        this.setState( { 'total_books' : current_year_data['total_books'] } );
+        this.setState( { 'total_pages' : current_year_data['total_pages'] } );
+        this.setState( { 'average_rating' : current_year_data['avg_rating'] } );
+        this.setState( { 'first_book' : current_year_data['first_book'] } );
+        this.setState( { 'last_book' : current_year_data['last_book'] } ) ;
+
     }
 
     render() {
         return (
             <div>
                 <SideBar {...this.props} />
-                <SummaryPage year={this.props.current_year} />
+                <SummaryPage year={this.props.match.params.current_year} total_pages={this.state.total_pages} total_books={this.state.total_books}
+                average_rating={this.state.average_rating} first_book={this.state.first_book} last_book={this.state.last_book}/>
                 <PagesPage {...this.props} />
                 <StarsPage {...this.props} />
                 <PopularityPage {...this.props} />
