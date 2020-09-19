@@ -17,7 +17,7 @@ def get_user_data(user_id):
     print(f'===user info===\nyear joined: {year_joined}\nprofile image: {profile_image}\nprofile url: {profile_url}\nusername: {user_name}')
 
     if year_joined and profile_image and profile_url and user_name:
-        current_year = 2014 #date.today().year
+        current_year = date.today().year
         all_years = list(range(int(year_joined), current_year+1))  # years user can choose from sidebar menu
         all_year_data = []
 

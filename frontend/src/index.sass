@@ -23,6 +23,9 @@ body
     margin: auto
     text-align: center
 
+.section-title
+    font-size: 1.5em
+
 // LANDING PAGE STYLES
 .login-wrapper
     min-height: 100%
@@ -100,9 +103,19 @@ body
     overflow: hidden
     .pic
         position: relative
-        top: 90vh
-        background-color: white
-
+        top: 80vh
+        height: 20vh
+        align: center
+        .pic-wrapper
+            height: 100px
+            width: 100px
+            border-radius: 50%
+            border: 5px #efcebf solid
+            overflow: hidden
+            position: absolute
+            img
+                width: 100%
+                height: auto
 .summary-page
     .summary-wrapper
         background-color: #efcebf
@@ -141,8 +154,6 @@ body
                 width: 85%
                 height: 42%
                 flex-direction: column
-                .section-title
-                    font-size: 1.5em
             .first-book
                 margin-bottom: 5%
             .last-book
@@ -156,31 +167,19 @@ body
         .pages-content-wrapper
             height: 55%
             width: 85%
-            p.section-title
-                font-size: 1.5em
-            .shortest-book
+            .shortest-book, .longest-book
                 color: #F9F0E4
                 background-color: #393734
                 height: 80%
                 width: 35%
                 flex-direction: column
+                .section-title
+                    margin-top: 10%
                 p
                     margin: 0
-                p.section-title
-                    margin-top: 1em
             .average-pages
                 height: 80%
                 width: 30%
-            .longest-book
-                color: #F9F0E4
-                background-color: #393734
-                height: 80%
-                width: 35%
-                flex-direction: column
-                p
-                    margin: 0
-                p.section-title
-                    margin-top: 1em
         .pages-graph-wrapper
             height: 45%
             .pages-graph-border
@@ -201,6 +200,7 @@ body
             flex-direction: column
             height: 100%
             width: 100%
+            color: #EFCEBF
             .stars-graph-title
                 background-color: #5A5751
                 width: 75%
@@ -219,8 +219,6 @@ body
                 width: 75%
                 height: 80%
                 flex-direction: column
-                .section-title
-                    font-size: 1.5em
 
 .popularity-page
     .popularity-wrapper
@@ -230,15 +228,14 @@ body
         .popularity-content
             height: 100%
             width: 100%
-            .most-popular
+            .most-popular, .least-popular
                 background-color: #F9F0E4
                 height: 80%
                 width: 30%
+                text-align: left
+            .most-popular
                 margin-right: 10%
             .least-popular
-                background-color: #F9F0E4
-                height: 80%
-                width: 30%
                 margin-left: 10%
 
 .covers-page
