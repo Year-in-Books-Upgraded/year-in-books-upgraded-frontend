@@ -69,14 +69,24 @@ class PagesPage extends Component {
             <div className="full-page-wrapper pages-page">
                 <div className="background-section-wrapper content-wrapper">
                     <div className="pages-content-wrapper flexing">
-                        <div className="shortest-book">
-                            shortest book
+                        <div className="shortest-book flexing">
+                            <div>
+                                <a href={this.props.shortest_book.gr_link}><img src={this.props.shortest_book.cover} alt={this.props.shortest_book.title}/></a>
+                                <p><i>{this.props.shortest_book.title}</i><br/>{this.props.shortest_book.author}</p>
+                                <p className="section-title">&#9632; Shortest Book &#9632;</p>
+                                <p>{this.props.shortest_book.num_pages} pages</p>
+                            </div>
                         </div>
-                        <div className="average-pages">
-                            average pages
+                        <div className="average-pages flexing">
+                            <p>Average pages {this.props.average_pages}</p>
                         </div>
-                        <div className="longest-book">
-                            longest book
+                        <div className="longest-book flexing">
+                            <div>
+                                <a href={this.props.longest_book.gr_link}><img src={this.props.longest_book.cover} alt={this.props.longest_book.title}/></a>
+                                <p><i>{this.props.longest_book.title}</i><br/>{this.props.longest_book.author}</p>
+                                <p className="section-title">&#9632; Longest Book &#9632;</p>
+                                <p>{this.props.longest_book.num_pages} pages</p>
+                            </div>
                         </div>
                     </div>
 
@@ -161,7 +171,10 @@ class YearPage extends Component {
             'total_pages' : 0,
             'average_rating' : 0,
             'first_book' : {},
-            'last_book' : {}
+            'last_book' : {},
+            'shortest_book' : {},
+            'longest_book' : {},
+            'average_pages' : 0
         }
     }
 
@@ -176,7 +189,9 @@ class YearPage extends Component {
         this.setState( { 'average_rating' : current_year_data['avg_rating'] } );
         this.setState( { 'first_book' : current_year_data['first_book'] } );
         this.setState( { 'last_book' : current_year_data['last_book'] } ) ;
-
+        this.setState( { 'shortest_book' : current_year_data['shortest_book'] } ) ;
+        this.setState( { 'longest_book' : current_year_data['longest_book'] } ) ;
+        this.setState( { 'average_pages' : current_year_data['avg_pages'] } );
     }
 
     render() {
@@ -185,7 +200,7 @@ class YearPage extends Component {
                 <SideBar {...this.props} />
                 <SummaryPage year={this.props.match.params.current_year} total_pages={this.state.total_pages} total_books={this.state.total_books}
                 average_rating={this.state.average_rating} first_book={this.state.first_book} last_book={this.state.last_book}/>
-                <PagesPage {...this.props} />
+                <PagesPage shortest_book={this.state.shortest_book} longest_book={this.state.longest_book} average_pages={this.state.average_pages}/>
                 <StarsPage {...this.props} />
                 <PopularityPage {...this.props} />
                 <CoversPage {...this.props} />
