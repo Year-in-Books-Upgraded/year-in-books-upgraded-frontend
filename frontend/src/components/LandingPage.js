@@ -26,7 +26,8 @@ class LandingPage extends Component {
         this.setState({loading : true});
         axios.get('http://localhost:5000/getuserdata/' + this.state.user_id)
             .then(response => {
-                console.log(response);
+                sessionStorage.setItem('user_data', JSON.stringify(response.data));
+                console.log(response.data);
                 this.setState({loading : false});
                 this.setState({data_fetched : true});
             })
@@ -43,7 +44,9 @@ class LandingPage extends Component {
                 </div>
             )
         } else if(this.state.data_fetched) {
-            return <Redirect to='/year/2020' />
+            let all_years_array = JSON.parse(sessionStorage.getItem('user_data')).all_years
+            let latest_year = all_years_array[all_years_array.length - 1]
+            return <Redirect to={'/year/'+latest_year.toString()} />
         }
         return(
             <div className="full-page-wrapper">

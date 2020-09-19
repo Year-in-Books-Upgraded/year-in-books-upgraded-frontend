@@ -3,6 +3,7 @@ body
     margin: 0 !important
     padding: 0 !important
     font-family: 'Poppins', sans-serif
+    font-size: 16px
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
 
@@ -22,7 +23,10 @@ body
     margin: auto
     text-align: center
 
-// LOGIN LANDING PAGE STYLES
+.section-title
+    font-size: 1.5em
+
+// LANDING PAGE STYLES
 .login-wrapper
     min-height: 100%
     width: 100%
@@ -99,9 +103,19 @@ body
     overflow: hidden
     .pic
         position: relative
-        top: 90vh
-        background-color: white
-
+        top: 80vh
+        height: 20vh
+        align: center
+        .pic-wrapper
+            height: 100px
+            width: 100px
+            border-radius: 50%
+            border: 5px #efcebf solid
+            overflow: hidden
+            position: absolute
+            img
+                width: 100%
+                height: auto
 .summary-page
     .summary-wrapper
         background-color: #efcebf
@@ -114,10 +128,19 @@ body
             width: 75%
             height: 100%
             text-align: left
+            .title
+                font-size: 3em
+                margin: 0
+            .year
+                font-size: 2em
+                margin: 0
             .divider
                 height: 5px
                 background-color: #DAA993
-                width: 40%
+                width: 80%
+                margin: 2em 0em
+            .stats
+                font-size: 1.5em
     .first-last-wrapper
         background-color: #393734
         left: 70%
@@ -126,16 +149,15 @@ body
             flex-direction: column
             height: 100%
             width: 100%
-            .first-book
+            .first-book, .last-book
                 background-color: #F9F0E4
                 width: 85%
                 height: 42%
+                flex-direction: column
+            .first-book
                 margin-bottom: 5%
             .last-book
-                 background-color: #F9F0E4
-                 width: 85%
-                 height: 42%
-                 margin-top: 5%
+                margin-top: 5%
 
 .pages-page
     .content-wrapper
@@ -143,24 +165,26 @@ body
         width: 90%
         left: 10%
         .pages-content-wrapper
-            height: 50%
-            width: 100%
-            .shortest-book
+            height: 55%
+            width: 85%
+            .shortest-book, .longest-book
+                color: #F9F0E4
                 background-color: #393734
                 height: 80%
-                width: 30%
+                width: 35%
+                flex-direction: column
+                .section-title
+                    margin-top: 10%
+                p
+                    margin: 0
             .average-pages
-                height: 80%
-                width: 25%
-            .longest-book
-                background-color: #393734
                 height: 80%
                 width: 30%
         .pages-graph-wrapper
-            height: 50%
+            height: 45%
             .pages-graph-border
                 background-color: #EFCEBF
-                height: 80%
+                height: 85%
                 width: 85%
                 .pages-graph
                     background-color: #EFCEBF
@@ -176,6 +200,7 @@ body
             flex-direction: column
             height: 100%
             width: 100%
+            color: #EFCEBF
             .stars-graph-title
                 background-color: #5A5751
                 width: 75%
@@ -188,10 +213,12 @@ body
             flex-direction: column
             height: 100%
             width: 100%
-            .highest-rated-title
+            .highest-rated
+                color: #F9F0E4
                 background-color: #393734
                 width: 75%
                 height: 80%
+                flex-direction: column
 
 .popularity-page
     .popularity-wrapper
@@ -201,15 +228,14 @@ body
         .popularity-content
             height: 100%
             width: 100%
-            .most-popular
+            .most-popular, .least-popular
                 background-color: #F9F0E4
                 height: 80%
                 width: 30%
+                text-align: left
+            .most-popular
                 margin-right: 10%
             .least-popular
-                background-color: #F9F0E4
-                height: 80%
-                width: 30%
                 margin-left: 10%
 
 .covers-page
