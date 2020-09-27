@@ -26,6 +26,35 @@ body
 .section-title
     font-size: 1.5em
 
+
+// LOADING PAGE STYLES
+.loading-wrapper
+    min-height: 100%
+    width: 100%
+    position: absolute
+    background-color: #EFCEBF
+    flex-direction: column
+.loading-text
+    color: #393734
+.loading-dots
+    span
+        height: 1.5em
+        width: 1.5em
+        background-color: #DAA993
+        margin: 2em
+        animation: colorshift 1.8s infinite ease-in-out
+        &:nth-child(1)
+            animation-delay: 0
+        &:nth-child(2)
+            animation-delay: 0.6s
+        &:nth-child(3)
+            animation-delay: 1.2s
+    @keyframes colorshift
+        from
+            background-color: #DAA993
+        to
+            background-color: #EFCEBF
+
 // LANDING PAGE STYLES
 .login-wrapper
     min-height: 100%
@@ -103,19 +132,18 @@ body
     overflow: hidden
     .pic
         position: relative
-        top: 80vh
-        height: 20vh
+        top: 85vh
+        height: 65px
+        width: 65px
         align: center
         .pic-wrapper
-            height: 100px
-            width: 100px
+            height: 100%
+            width: 100%
             border-radius: 50%
             border: 5px #efcebf solid
             overflow: hidden
             position: absolute
-            img
-                width: 100%
-                height: auto
+
 .summary-page
     .summary-wrapper
         background-color: #efcebf
@@ -165,26 +193,26 @@ body
         width: 90%
         left: 10%
         .pages-content-wrapper
-            height: 55%
+            height: 45%
             width: 85%
             .shortest-book, .longest-book
                 color: #F9F0E4
                 background-color: #393734
-                height: 80%
+                height: 90%
                 width: 35%
                 flex-direction: column
                 .section-title
-                    margin-top: 10%
-                p
-                    margin: 0
+                    margin-top: 5%
             .average-pages
                 height: 80%
                 width: 30%
+            p
+                margin: 0
         .pages-graph-wrapper
-            height: 45%
+            height: 55%
             .pages-graph-border
                 background-color: #EFCEBF
-                height: 85%
+                height: 90%
                 width: 85%
                 .pages-graph
                     background-color: #EFCEBF
@@ -232,7 +260,10 @@ body
                 background-color: #F9F0E4
                 height: 80%
                 width: 30%
-                text-align: left
+                div
+                    height: 50%
+                    text-align: left
+                    padding: 10%
             .most-popular
                 margin-right: 10%
             .least-popular

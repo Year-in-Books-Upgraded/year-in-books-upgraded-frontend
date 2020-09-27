@@ -4,6 +4,7 @@ import  './index.sass';
 
 import LandingPage from './components/LandingPage.js';
 import YearPage from './components/YearPage.js';
+import { LoadingPage, ErrorPage } from './components/Handling.js';
 
 function App() {
     return(
@@ -11,6 +12,10 @@ function App() {
             <Switch>
                 <Route path="/" exact component={LandingPage} />
                 <Route path="/year/:current_year" component={YearPage} />
+
+
+                <Route path="/loading" component={LoadingPage} />
+                <Route path="/error" component={ErrorPage} />
             </Switch>
         </Router>
     );

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import goodreads_logo from '../images/goodreads_logo.png';
 
+import { LoadingPage } from './Handling.js'
 
 class LandingPage extends Component {
 
@@ -36,13 +37,7 @@ class LandingPage extends Component {
 
     render() {
         if(this.state.loading) {
-            return (
-                <div className="full-page-wrapper">
-                    <div className="flexing">
-                        <h1>Loading ...</h1>
-                    </div>
-                </div>
-            )
+            return <LoadingPage/>
         } else if(this.state.data_fetched) {
             let all_years_array = JSON.parse(sessionStorage.getItem('user_data')).all_years
             let latest_year = all_years_array[all_years_array.length - 1]

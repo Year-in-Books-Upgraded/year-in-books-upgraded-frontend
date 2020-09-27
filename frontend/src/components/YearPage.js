@@ -32,10 +32,10 @@ class SummaryPage extends Component {
                         </div>
                         <div className="stats">
                             <p>
-                                <b>{this.props.total_pages}</b> pages across <b>{this.props.total_books}</b> books
+                                <b>{Number(this.props.total_pages).toLocaleString()}</b> pages across <b>{Number(this.props.total_books).toLocaleString()}</b> books
                             </p>
                             <p>
-                                Average rating <b>{this.props.average_rating} &#9733;</b>
+                                Your average rating <b>{this.props.average_rating} &#9733;</b>
                             </p>
                         </div>
                     </div>
@@ -76,7 +76,10 @@ class PagesPage extends Component {
                             </div>
                         </div>
                         <div className="average-pages flexing">
-                            <p>Average pages {this.props.average_pages}</p>
+                           <div>
+                               <p className="section-title">&#9632; Average &#9632;</p>
+                               <p>{this.props.average_pages} pages</p>
+                           </div>
                         </div>
                         <div className="longest-book flexing">
                             <div>
@@ -118,7 +121,7 @@ class StarsPage extends Component {
                             <a href={this.props.highest_rated.gr_link}><img src={this.props.highest_rated.cover} alt={this.props.highest_rated.title}/></a>
                             <p><b><i>{this.props.highest_rated.title}</i></b><br/>{this.props.highest_rated.author}</p>
                             <p className="section-title">&#9632; Highest Rated on Goodreads &#9632;</p>
-                            <p>{this.props.highest_rated.avg_rating} stars<br/>{this.props.highest_rated.num_reads} ratings</p>
+                            <p>Average rating {this.props.highest_rated.avg_rating} &#9733;<br/>{Number(this.props.highest_rated.num_reads).toLocaleString()} ratings</p>
                         </div>
                     </div>
                 </div>
@@ -134,16 +137,24 @@ class PopularityPage extends Component {
                 <div className="background-section-wrapper popularity-wrapper">
                     <div className="popularity-content flexing">
                         <div className="most-popular">
-                            <a href={this.props.most_popular.gr_link}><img src={this.props.most_popular.cover} alt={this.props.most_popular.title}/></a>
-                            <p><b><i>{this.props.most_popular.title}</i></b><br/>{this.props.most_popular.author}</p>
-                            <p className="section-title">Most popular</p>
-                            <p>{this.props.most_popular.num_reads}<br/>people have read this book</p>
+                            <div>
+                                <a href={this.props.most_popular.gr_link}><img src={this.props.most_popular.cover} alt={this.props.most_popular.title}/></a>
+                                <p><b><i>{this.props.most_popular.title}</i></b><br/>{this.props.most_popular.author}</p>
+                            </div>
+                            <div>
+                                <p className="section-title">Most popular</p>
+                                <p>{Number(this.props.most_popular.num_reads).toLocaleString()}<br/>people have read this book</p>
+                            </div>
                         </div>
                         <div className="least-popular">
-                            <a href={this.props.least_popular.gr_link}><img src={this.props.least_popular.cover} alt={this.props.least_popular.title}/></a>
-                            <p><b><i>{this.props.least_popular.title}</i></b><br/>{this.props.least_popular.author}</p>
-                            <p className="section-title">Least popular</p>
-                            <p>{this.props.least_popular.num_reads}<br/>people have read this book</p>
+                            <div>
+                                <a href={this.props.least_popular.gr_link}><img src={this.props.least_popular.cover} alt={this.props.least_popular.title}/></a>
+                                <p><b><i>{this.props.least_popular.title}</i></b><br/>{this.props.least_popular.author}</p>
+                            </div>
+                            <div>
+                                <p className="section-title">Least popular</p>
+                                <p>{Number(this.props.least_popular.num_reads).toLocaleString()}<br/>people have read this book</p>
+                            </div>
                         </div>
                     </div>
                 </div>
