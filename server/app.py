@@ -14,18 +14,20 @@ CORS(app)
 @app.route('/getuserdata/<user_id>')
 def get_user_data(user_id):
     year_joined, profile_image, profile_url, user_name = server.goodreads_get_user_info(user_id)
-    print(f'===user info===\nyear joined: {year_joined}\nprofile image: {profile_image}\nprofile url: {profile_url}\nusername: {user_name}')
+    print(f'=====user info=====\nyear joined: {year_joined}\nprofile image: {profile_image}\nprofile url: {profile_url}\nusername: {user_name}')
 
     if year_joined and profile_image and profile_url and user_name:
         current_year = date.today().year
         all_years = list(range(int(year_joined), current_year+1))  # years user can choose from sidebar menu
         all_year_data = []
 
-        print('===processing each year===')
+        print('=====processing each year=====')
         for year in all_years:
+            print(f'===began processing {year}===')
             content = server.goodreads_get_read_shelf(year, user_id)
+            # print(content)
             year_data = server.get_year_data(year, content)
-            print(f'finished processing {year}')
+            print(f'===finished processing {year}===')
             if year_data:
                 all_year_data.append(year_data)
             else:
@@ -39,7 +41,7 @@ def get_user_data(user_id):
             'all_year_data' : all_year_data
         }
 
-        print('===finished getting user data===')
+        print('=====finished getting user data=====')
         return jsonify(gr_data)
 
     else:

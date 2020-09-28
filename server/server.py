@@ -73,8 +73,8 @@ def get_year_data(year, xml_content):
             'total_pages' : sum(review['num_pages'] for review in reviews),
             'avg_pages' : round(sum(review['num_pages'] for review in reviews) / len(reviews)),
             'avg_rating' : round((sum(review['your_rating'] for review in reviews) / len(reviews)), 2),
-            'first_book' : reviews[0],
-            'last_book': reviews[-1],
+            'first_book' : reviews[-1],
+            'last_book': reviews[0],
             'shortest_book' : next(review for review in sorted_by_pages if review['num_pages'] > 0),  # books with 0 pages (ex. webcomics)
             'longest_book' : sorted_by_pages[-1],
             'highest_rated_book' : sorted_by_rating[0],
