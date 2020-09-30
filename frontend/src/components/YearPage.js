@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
 
-class SideBar extends Component {
-    render() {
-        return (
-            <div className="sidebar">
-                <div className="pic flexing">
-                    <div className="pic-wrapper flexing">
-                        <a href={this.props.profile_url}><img src={this.props.profile_image} alt="Goodreads icon"/></a>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
+import SideBar from './SideBar.js'
 
 class SummaryPage extends Component {
     render() {
@@ -167,11 +155,14 @@ class CoversPage extends Component {
     render() {
         return(
             <div className="full-page-wrapper covers-page">
-                <div className="background-section-wrapper covers-wrapper">
-                    <div className="covers-grid flexing">
-                        <div className="cover">
-                            book covers grid
-                        </div>
+                <div className="covers-wrapper flexing">
+                    <div className="covers-grid">
+                        { this.props.books.map((book) =>
+                              <div className="image-container">
+                                  <a href={book.gr_link} title={book.title + ' by ' + book.author}><img src={ book.cover } alt= { book.title } /></a>
+                              </div>
+                          )
+                        }
                     </div>
                 </div>
             </div>
@@ -198,7 +189,8 @@ class YearPage extends Component {
             'average_pages' : 0,
             'highest_rated' : {},
             'most_popular' : {},
-            'least_popular' : {}
+            'least_popular' : {},
+            'books' : []
         }
     }
 
@@ -226,18 +218,20 @@ class YearPage extends Component {
         // popularity page
         this.setState( { 'most_popular' : current_year_data['most_read_book'] } );
         this.setState( { 'least_popular' : current_year_data['least_read_book'] } );
+        // covers page
+        this.setState( { 'books' : current_year_data['reviews'] } );
     }
 
     render() {
         return (
             <div>
-                <SideBar user_name={this.state.user_name} profile_image={this.state.profile_image} profile_url={this.state.profile_url}/>
+                <SideBar user_name={this.state.user_name} profile_image={this.state.profile_image} profile_url={this.state.profile_url} years={this.state.all_years}/>
                 <SummaryPage year={this.props.match.params.current_year} total_pages={this.state.total_pages} total_books={this.state.total_books}
                 average_rating={this.state.average_rating} first_book={this.state.first_book} last_book={this.state.last_book}/>
                 <PagesPage shortest_book={this.state.shortest_book} longest_book={this.state.longest_book} average_pages={this.state.average_pages}/>
                 <StarsPage highest_rated={this.state.highest_rated} />
                 <PopularityPage most_popular={this.state.most_popular} least_popular={this.state.least_popular} />
-                <CoversPage {...this.props} />
+                <CoversPage books={this.state.books} />
             </div>
         )
     }
