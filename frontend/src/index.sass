@@ -289,13 +289,32 @@ body
 
 .covers-page
     .covers-wrapper
-         background-color: #F9F0E4
-         width: 90%
-         left: 10%
-         .covers-grid
-             height: 100%
-             width: 100%
-             .cover
-                 background-color: #E5E5E5
-                 height: 85%
-                 width: 80%
+        position: absolute
+        min-height: 100%
+        background-color: #F9F0E4
+        width: 90%
+        left: 10%
+        flex-direction: column
+        align-items: center
+        justify-content: center
+        .covers-grid
+            margin-top: 5%
+            margin-bottom: 5%
+            width: 90%
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            .image-container
+                margin: 1%
+                display: flex
+                justify-content: center
+                align-items: center
+                img
+                    border: 0.25em solid #EFCEBF
+        .shelf-link
+            margin-bottom: 8%
+            a
+                font-weight: bold
+                color: #393734
+                &:hover
+                    background-color: #DAA993

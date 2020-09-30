@@ -34,6 +34,7 @@ def get_user_data(user_id):
                 all_years.remove(year) # years with no books
 
         gr_data = {
+            'user_id' : user_id,
             'user_name' : user_name,
             'profile_image' : profile_image,
             'profile_url' : profile_url,
