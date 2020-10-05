@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
+import { BarChart, ComposedChart, Bar, XAxis, YAxis, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-class SideBar extends Component {
-    render() {
-        return (
-            <div className="sidebar">
-                <div className="pic flexing">
-                    <div className="pic-wrapper flexing">
-                        <a href={this.props.profile_url}><img src={this.props.profile_image} alt="Goodreads icon"/></a>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
+import SideBar from './SideBar.js';
+
 
 class SummaryPage extends Component {
     render() {
@@ -62,6 +52,35 @@ class SummaryPage extends Component {
 }
 
 class PagesPage extends Component {
+    pagesChart(current_year, all_years, pages_per_year){
+        const data = []
+
+        for(var i=0; i<all_years.length; i++){
+            let year = all_years[i].toString();
+            let pages = pages_per_year[i];
+            data.push( { 'year':year, 'pages':pages } );
+        }
+
+        return (
+            <div className="pages-graph flexing">
+                <ResponsiveContainer>
+                    <BarChart data={data}>
+                        <XAxis dataKey="year" />
+                        <YAxis />
+                        <Bar dataKey='pages'>
+                            {
+                                data.map((entry) => (
+                                    <Cell fill={entry['year']===current_year.toString() ? '#DAA993' : '#5A5751'} />
+                                ))
+                            }
+                        </Bar>
+                    </BarChart>
+                </ResponsiveContainer>
+                <h2>Total pages read per year</h2>
+            </div>
+        );
+    }
+
     render(){
         return (
             <div className="full-page-wrapper pages-page">
@@ -93,9 +112,7 @@ class PagesPage extends Component {
 
                     <div className="pages-graph-wrapper flexing">
                         <div className="pages-graph-border flexing">
-                            <div className="pages-graph flexing">
-                                pages read graph
-                            </div>
+                            {this.pagesChart(this.props.year, this.props.all_years, this.props.pages_per_year)}
                         </div>
                     </div>
                 </div>
@@ -105,14 +122,41 @@ class PagesPage extends Component {
 }
 
 class StarsPage extends Component {
+    starsChart(books){
+        const ratings = [0, 0, 0, 0, 0]
+        const data = []
+
+        for(var i=0; i<books.length; i++){
+            let rating = books[i]['your_rating'];
+            ratings[rating-1]++;
+        }
+
+        for(var i=5; i>0; i--){
+            data.push( { 'rating':i, 'count':ratings[i-1] } );
+        }
+
+        console.log(data);
+
+        return (
+            <div className="stars-graph flexing">
+                <ResponsiveContainer>
+                    <ComposedChart layout='vertical' data={data}>
+                        <XAxis type='number' stroke='#EFCEBF' />
+                        <YAxis dataKey='rating' type='category' stroke='#EFCEBF' />
+                        <Bar dataKey='count' fill='#F9F0E4' barSize={40}></Bar>
+                    </ComposedChart>
+                </ResponsiveContainer>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="full-page-wrapper stars-page">
-                <div className="background-section-wrapper stars-wrapper">
-                    <div className="stars-graph flexing">
-                        <div className="stars-graph-title">
-                            <p className="section-title">&#9733; Your Ratings &#9733;</p>
-                        </div>
+                <div className="background-section-wrapper stars-wrapper flexing">
+                    <div className="stars-graph-border flexing">
+                        <h2 className="section-title">&#9733; Your Ratings &#9733;</h2>
+                        {this.starsChart(this.props.books)}
                     </div>
                 </div>
                 <div className="background-section-wrapper highest-rated-wrapper">
@@ -167,12 +211,16 @@ class CoversPage extends Component {
     render() {
         return(
             <div className="full-page-wrapper covers-page">
-                <div className="background-section-wrapper covers-wrapper">
-                    <div className="covers-grid flexing">
-                        <div className="cover">
-                            book covers grid
-                        </div>
+                <div className="covers-wrapper flexing">
+                    <div className="covers-grid">
+                        { this.props.books.filter(book => !book.cover.includes('nophoto')).map(book =>
+                              <div className="image-container">
+                                  <a href={book.gr_link} title={book.title + ' by ' + book.author}><img src={ book.cover } alt= { book.title } /></a>
+                              </div>
+                          )
+                        }
                     </div>
+                    <h3 className="shelf-link"><a href={"https://www.goodreads.com/review/list?id="+ this.props.user_id + "&shelf=read&sort=date_read&read_at=" + this.props.year}>See all of the books you've read in {this.props.year}!</a></h3>
                 </div>
             </div>
         );
@@ -184,6 +232,7 @@ class YearPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            'user_id' : '',
             'user_name' : '',
             'profile_image' : '',
             'profile_url' : '',
@@ -198,7 +247,8 @@ class YearPage extends Component {
             'average_pages' : 0,
             'highest_rated' : {},
             'most_popular' : {},
-            'least_popular' : {}
+            'least_popular' : {},
+            'books' : []
         }
     }
 
@@ -206,12 +256,13 @@ class YearPage extends Component {
         let current_year = this.props.match.params.current_year;
         let user_data = JSON.parse(sessionStorage.getItem('user_data'));
         // sidebar
+        this.setState( { 'user_id' : user_data.user_id } );
         this.setState( { 'user_name' : user_data.user_name } );
         this.setState( { 'profile_image' : user_data.profile_image } );
         this.setState( { 'profile_url' : user_data.profile_url } );
         this.setState( { 'all_years' : user_data.all_years } );
         // summary page
-        let current_year_data = user_data['all_year_data'].find(x => x['year'] === parseInt(current_year))
+        let current_year_data = user_data['all_year_data'].find(x => x['year'] === parseInt(current_year));
         this.setState( { 'total_books' : current_year_data['total_books'] } );
         this.setState( { 'total_pages' : current_year_data['total_pages'] } );
         this.setState( { 'average_rating' : current_year_data['avg_rating'] } );
@@ -221,23 +272,28 @@ class YearPage extends Component {
         this.setState( { 'shortest_book' : current_year_data['shortest_book'] } );
         this.setState( { 'longest_book' : current_year_data['longest_book'] } );
         this.setState( { 'average_pages' : current_year_data['avg_pages'] } );
+        let years = user_data.all_years;
+        let total_pages_per_year = years.map(y => (user_data['all_year_data'].find(x => x['year'] === parseInt(y)))['total_pages']);
+        this.setState( { 'total_pages_per_year' : total_pages_per_year } );
         // stars page
         this.setState( { 'highest_rated' : current_year_data['highest_rated_book'] } );
         // popularity page
         this.setState( { 'most_popular' : current_year_data['most_read_book'] } );
         this.setState( { 'least_popular' : current_year_data['least_read_book'] } );
+        // covers page
+        this.setState( { 'books' : current_year_data['reviews'] } );
     }
 
     render() {
         return (
             <div>
-                <SideBar user_name={this.state.user_name} profile_image={this.state.profile_image} profile_url={this.state.profile_url}/>
+                <SideBar user_name={this.state.user_name} profile_image={this.state.profile_image} profile_url={this.state.profile_url} years={this.state.all_years} />
                 <SummaryPage year={this.props.match.params.current_year} total_pages={this.state.total_pages} total_books={this.state.total_books}
-                average_rating={this.state.average_rating} first_book={this.state.first_book} last_book={this.state.last_book}/>
-                <PagesPage shortest_book={this.state.shortest_book} longest_book={this.state.longest_book} average_pages={this.state.average_pages}/>
-                <StarsPage highest_rated={this.state.highest_rated} />
+                average_rating={this.state.average_rating} first_book={this.state.first_book} last_book={this.state.last_book} />
+                <PagesPage shortest_book={this.state.shortest_book} longest_book={this.state.longest_book} average_pages={this.state.average_pages} year={this.props.match.params.current_year} all_years={this.state.all_years} pages_per_year={this.state.total_pages_per_year} />
+                <StarsPage highest_rated={this.state.highest_rated} books={this.state.books} />
                 <PopularityPage most_popular={this.state.most_popular} least_popular={this.state.least_popular} />
-                <CoversPage {...this.props} />
+                <CoversPage year={this.props.match.params.current_year} user_id={this.state.user_id} books={this.state.books} />
             </div>
         )
     }
