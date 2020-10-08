@@ -22,9 +22,11 @@ body
     justify-content: center
     margin: auto
     text-align: center
+    overflow: hidden
 
 .section-title
     font-size: 1.5em
+    margin: 0
 
 
 // LOADING PAGE STYLES
@@ -157,8 +159,7 @@ body
         .pic-wrapper
             height: 100%
             width: 100%
-            border-radius: 50%
-            border: 5px #efcebf solid
+            border-radius: 100%
             overflow: hidden
             position: absolute
 
@@ -195,15 +196,25 @@ body
             flex-direction: column
             height: 100%
             width: 100%
-            .first-book, .last-book
+            .first-book-wrapper, .last-book-wrapper
                 background-color: #F9F0E4
                 width: 85%
                 height: 42%
-                flex-direction: column
-            .first-book
+            .first-book-wrapper
                 margin-bottom: 5%
-            .last-book
+            .last-book-wrapper
                 margin-top: 5%
+            .first-book, .last-book
+                height: 100%
+                max-height: 100%
+                flex-direction: column
+                .section-title
+                    margin-top: 5%
+                .cover
+                    margin-top: 5%
+                    height: 40%
+                    img
+                        max-height: 100%
 
 .pages-page
     .content-wrapper
@@ -212,18 +223,33 @@ body
         left: 10%
         .pages-content-wrapper
             height: 45%
-            width: 85%
-            .shortest-book, .longest-book
+            width: 90%
+            .shortest-book-wrapper, .longest-book-wrapper
                 color: #F9F0E4
                 background-color: #393734
-                height: 90%
-                width: 35%
+                height: 80%
+                width: 38%
+                margin: 0
+                padding: 2%
                 flex-direction: column
                 .section-title
                     margin-top: 5%
+                .item
+                    width: 90%
+                    .cover
+                        height: 100%
+                        max-height: 100%
+                        width: 60%
+                        img
+                            max-width: 100%
+                    p
+                        margin-left: 2%
+                .info
+                    flex-direction: column
             .average-pages
                 height: 80%
-                width: 30%
+                width: 22%
+                margin: 0
             p
                 margin: 0
         .pages-graph-wrapper
@@ -231,13 +257,18 @@ body
             .pages-graph-border
                 background-color: #EFCEBF
                 height: 90%
-                width: 85%
+                width: 90%
+                flex-direction: column
                 .pages-graph
-                    height: 85%
-                    width: 90%
+                    height: 95%
+                    width: 95%
                     flex-direction: column
-                    h2
-                        color: #393734
+                    margin-top: 2%
+                    margin-bottom: 0
+                h2
+                    margin-top: 1%
+                    margin-bottom: 1%
+                    color: #393734
 
 .stars-page
     .stars-wrapper
@@ -251,10 +282,10 @@ body
             flex-direction: column
             .section-title
                 color: #EFCEBF
+                margin: 10%
             .stars-graph
                 height: 75%
                 width: 90%
-                margin-right: 20%
                 color: #F9F0E4
 
     .highest-rated-wrapper
@@ -271,6 +302,16 @@ body
                 width: 75%
                 height: 80%
                 flex-direction: column
+                .highest-rated-book
+                    margin-top: 10%
+                    height: 50%
+                    flex-direction: column
+                    img
+                        height: 60%
+                .highest-rated-info
+                    height: 30%
+                    flex-direction: column
+
 
 .popularity-page
     .popularity-wrapper
@@ -283,15 +324,18 @@ body
             .most-popular, .least-popular
                 background-color: #F9F0E4
                 height: 80%
-                width: 30%
+                width: 40%
+                overflow: hidden
                 div
-                    height: 50%
                     text-align: left
+                    height: 50%
                     padding: 10%
+                    img
+                        height: 50%
             .most-popular
-                margin-right: 10%
+                margin-right: 5%
             .least-popular
-                margin-left: 10%
+                margin-left: 5%
 
 .covers-page
     .covers-wrapper
