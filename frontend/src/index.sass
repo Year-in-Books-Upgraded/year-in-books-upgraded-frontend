@@ -150,9 +150,14 @@ body
     text-align: center
     width: 10%
     overflow: hidden
+    flex-direction: column
+    .menu-icon
+        position: absolute
+        top: 5vh
+        color: #F9F0E4
     .pic
-        position: relative
-        top: 85vh
+        position: absolute
+        top: 80vh
         height: 65px
         width: 65px
         align: center
@@ -162,7 +167,6 @@ body
             border-radius: 100%
             overflow: hidden
             position: absolute
-
 
 .year-menu
     z-index: 1
@@ -174,7 +178,7 @@ body
     flex-direction: column
     .years-wrapper
         height: 100vh
-        width: 80%
+        width: 90%
         flex-wrap: wrap
         .years
             width: 60%
@@ -191,13 +195,12 @@ body
                     border-color: #393734
                     color: #F9F0E4
         .home-wrapper
-            width: 20%
+            width: 40%
             .home-link
-                padding: 1%
+                padding: 10%
                 color: #393734
                 font-size: 1.5em
                 text-decoration: none
-
 
 
 .summary-page

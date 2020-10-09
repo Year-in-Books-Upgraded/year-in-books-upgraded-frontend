@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import HomeIcon from '@material-ui/icons/Home';
-import MenuIcon from '@material-ui/icons/Menu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTimes, faHome } from '@fortawesome/free-solid-svg-icons';
 
 class YearMenu extends Component {
     render(){
@@ -13,7 +13,7 @@ class YearMenu extends Component {
                     </div>
                     <div className="home-wrapper flexing">
                         <Link className="home-link flexing" to="/">
-                            <HomeIcon style={{ fontSize : 40 }} className="home-icon" />
+                            <FontAwesomeIcon icon={faHome} className="home-icon" />
                             <p>Search another member</p>
                         </Link>
                     </div>
@@ -24,20 +24,32 @@ class YearMenu extends Component {
 }
 
 class SideBar extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            'menuToggled' : false
+        };
+        this.toggleMenu = this.toggleMenu.bind(this);
+    }
+
+    toggleMenu(){
+        this.setState( { 'menuToggled' : (!this.state.menuToggled) } );
+    }
+
     render() {
         return (
             <div>
-                <div className="sidebar">
+                <div className="sidebar flexing">
+                    <div className="menu-icon" onClick={this.toggleMenu}>
+                        {this.state.menuToggled === false ? <FontAwesomeIcon icon={faBars} size="3x" cursor="pointer"/> : <FontAwesomeIcon icon={faTimes} size="3x" cursor="pointer"/>}
+                    </div>
                     <div className="pic flexing">
                         <div className="pic-wrapper flexing">
                             <a href={this.props.profile_url}><img src={this.props.profile_image} alt="Goodreads icon"/></a>
                         </div>
                     </div>
-                    <MenuIcon className="hamburger-icon" style={{ fontSize : 60, color : '#F9F0E4' }}/>
                 </div>
-                <div>
-                    {<YearMenu years={this.props.years}/>}
-                </div>
+                { this.state.menuToggled && <div onClick={this.toggleMenu}>{<YearMenu years={this.props.years}/>}</div> }
             </div>
         );
     }

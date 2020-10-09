@@ -165,8 +165,6 @@ class StarsPage extends Component {
             data.push( { 'rating':j + ' stars', 'count':ratings[j-1] } );
         }
 
-        console.log(data);
-
         return (
             <div className="stars-graph">
                 <ResponsiveContainer>
@@ -284,6 +282,7 @@ class CoversPage extends Component {
 class YearPage extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             'user_id' : '',
             'user_name' : '',
