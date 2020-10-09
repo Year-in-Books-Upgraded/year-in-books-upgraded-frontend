@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import goodreads_logo from '../images/goodreads_logo.png';
 
-import { LoadingPage, ErrorPage } from './Handling.js'
+import { LoadingPage } from './Handling.js'
 
 class LandingPage extends Component {
 
@@ -61,13 +61,14 @@ class LandingPage extends Component {
             return <Redirect to={'/year/'+latest_year.toString()} />
         } else if(this.state.error) {
             if(this.state.error_type === 1){
-                return <ErrorPage error_message="Unable to retrieve user data. You may have entered an invalid user ID or this Goodreads user may limit their profile settings." />
+                return <Redirect to={{ pathname : '/error', state : { error_message : "Unable to retrieve user data. You may have entered an invalid user ID or this Goodreads user may limit their profile settings."} }} />
             } else if(this.state.error_type === 2){
-                return <ErrorPage error_message="This user has no read books." />
+                return <Redirect to={{ pathname : '/error', state : { error_message : "This user has no read books."} }} />
             } else {
-                return <ErrorPage error_message="The application encountered an error." />
+                return <Redirect to={{ pathname : '/error', state : { error_message : "The application encountered an error." } }} />
             }
         }
+
         return(
             <div className="full-page-wrapper">
                 <div className="login-wrapper flexing">

@@ -305,7 +305,7 @@ class YearPage extends Component {
         }
     }
 
-    componentDidMount() {
+    setAllData(){
         let current_year = this.props.match.params.current_year;
         let user_data = JSON.parse(sessionStorage.getItem('user_data'));
         // sidebar
@@ -335,6 +335,18 @@ class YearPage extends Component {
         this.setState( { 'least_popular' : current_year_data['least_read_book'] } );
         // covers page
         this.setState( { 'books' : current_year_data['reviews'] } );
+    }
+
+    componentDidMount() {
+        this.setAllData();
+    }
+
+    componentDidUpdate(prevProps){
+        var prevYear = prevProps.match.params.current_year;
+        var thisYear = this.props.match.params.current_year;
+        if(prevYear !== thisYear) {
+            this.setAllData();
+        }
     }
 
     render() {

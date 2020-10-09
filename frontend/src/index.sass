@@ -163,6 +163,43 @@ body
             overflow: hidden
             position: absolute
 
+
+.year-menu
+    z-index: 1
+    background-color: #DAA993
+    height: 100vh
+    left: 10%
+    width: 90%
+    position: fixed
+    flex-direction: column
+    .years-wrapper
+        height: 100vh
+        width: 80%
+        flex-wrap: wrap
+        .years
+            width: 60%
+            flex-wrap: wrap
+            .year-link
+                color: #393734
+                text-decoration: none
+                border: 5px #EFCEBF solid
+                border-radius: 20%
+                font-size: 2em
+                padding: 2%
+                margin: 5%
+                &:hover
+                    border-color: #393734
+                    color: #F9F0E4
+        .home-wrapper
+            width: 20%
+            .home-link
+                padding: 1%
+                color: #393734
+                font-size: 1.5em
+                text-decoration: none
+
+
+
 .summary-page
     .summary-wrapper
         background-color: #efcebf
