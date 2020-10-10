@@ -27,7 +27,7 @@ class LandingPage extends Component {
 
     handleSubmit(event){
         this.setState({loading : true});
-        axios.get('http://localhost:5000/getuserdata/' + this.state.user_id)
+        axios.get('/api/getuserdata/' + this.state.user_id)
             .then(response => {
                 sessionStorage.setItem('user_data', JSON.stringify(response.data));
                 console.log(response.data);
