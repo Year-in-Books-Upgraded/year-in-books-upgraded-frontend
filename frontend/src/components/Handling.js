@@ -26,7 +26,7 @@ class ErrorPage extends Component {
             <div className="full-page-wrapper">
                 <div className="error-wrapper flexing">
                     <div>
-                        <h1 className="error-text">Oh no!<br/> Unable to retrieve user data. You may have entered an invalid user ID or this Goodreads user may limit their profile settings.</h1>
+                        <h1 className="error-text">Oh no!<br/> {this.props.location.state.error_message}</h1>
                         <p className="return-link">&#9632; <a href="/">Return to landing</a> &#9632;</p>
                     </div>
                 </div>

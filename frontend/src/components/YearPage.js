@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BarChart, ComposedChart, Bar, XAxis, YAxis, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, ComposedChart, Bar, XAxis, YAxis, Cell, ResponsiveContainer } from 'recharts';
 
 import SideBar from './SideBar.js';
 
@@ -33,15 +33,23 @@ class SummaryPage extends Component {
 
                 <div className="background-section-wrapper first-last-wrapper">
                     <div className="first-last-content flexing">
-                        <div className="first-book flexing">
-                            <p className="section-title">&#9632; First Book &#9632;</p>
-                            <a href={this.props.first_book.gr_link}><img src={this.props.first_book.cover} alt={this.props.first_book.title}/></a>
-                            <p><b><i>{this.props.first_book.title}</i></b><br/>{this.props.first_book.author}</p>
+                        <div className="first-book-wrapper flexing">
+                            <div className="first-book flexing">
+                                <p className="section-title">&#9632; First Book &#9632;</p>
+                                <div className="cover">
+                                    <a href={this.props.first_book.gr_link}><img src={this.props.first_book.cover} alt={this.props.first_book.title}/></a>
+                                </div>
+                                <p><b><i>{this.props.first_book.title}</i></b><br/>{this.props.first_book.author}</p>
+                            </div>
                         </div>
-                        <div className="last-book flexing">
-                            <p className="section-title">&#9632; Last Book &#9632;</p>
-                            <a href={this.props.last_book.gr_link}><img src={this.props.last_book.cover} alt={this.props.last_book.cover} /></a>
-                            <p><b><i>{this.props.last_book.title}</i></b><br/>{this.props.last_book.author}</p>
+                        <div className="last-book-wrapper flexing">
+                            <div className="last-book flexing">
+                               <p className="section-title">&#9632; Last Book &#9632;</p>
+                               <div className="cover">
+                                   <a href={this.props.last_book.gr_link}><img src={this.props.last_book.cover} alt={this.props.last_book.cover} /></a>
+                               </div>
+                               <p><b><i>{this.props.last_book.title}</i></b><br/>{this.props.last_book.author}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,9 +84,22 @@ class PagesPage extends Component {
                         </Bar>
                     </BarChart>
                 </ResponsiveContainer>
-                <h2>Total pages read per year</h2>
             </div>
         );
+    }
+
+    componentDidUpdate(){
+        var pg = document.getElementsByClassName("pages-graph")[0]
+
+        var axisLines = pg.querySelectorAll(".recharts-cartesian-axis-line");
+        for (var i = axisLines.length - 1; i >= 0; i--){
+            axisLines[i].remove();
+        }
+
+        var tickLines = pg.querySelectorAll(".recharts-cartesian-axis-tick-line");
+        for (var j = tickLines.length - 1; j >= 0; j--){
+            tickLines[j].remove();
+        }
     }
 
     render(){
@@ -86,24 +107,32 @@ class PagesPage extends Component {
             <div className="full-page-wrapper pages-page">
                 <div className="background-section-wrapper content-wrapper">
                     <div className="pages-content-wrapper flexing">
-                        <div className="shortest-book flexing">
-                            <div>
-                                <a href={this.props.shortest_book.gr_link}><img src={this.props.shortest_book.cover} alt={this.props.shortest_book.title}/></a>
+                        <div className="shortest-book-wrapper flexing">
+                            <div className="item flexing">
+                                <div className="cover flexing">
+                                    <a href={this.props.shortest_book.gr_link}><img src={this.props.shortest_book.cover} alt={this.props.shortest_book.title}/></a>
+                                </div>
                                 <p><b><i>{this.props.shortest_book.title}</i></b><br/>{this.props.shortest_book.author}</p>
+                            </div>
+                            <div className="info flexing">
                                 <p className="section-title">&#9632; Shortest Book &#9632;</p>
                                 <p>{this.props.shortest_book.num_pages} pages</p>
                             </div>
                         </div>
                         <div className="average-pages flexing">
                            <div>
-                               <p className="section-title">&#9632; Average &#9632;</p>
-                               <p>{this.props.average_pages} pages</p>
+                               <p className="section-title">Average<br/>Pages</p>
+                               <p>&#9632; {this.props.average_pages} pages &#9632;</p>
                            </div>
                         </div>
-                        <div className="longest-book flexing">
-                            <div>
-                                <a href={this.props.longest_book.gr_link}><img src={this.props.longest_book.cover} alt={this.props.longest_book.title}/></a>
+                        <div className="longest-book-wrapper flexing">
+                            <div className="item flexing">
+                                <div className="cover flexing">
+                                    <a href={this.props.longest_book.gr_link}><img src={this.props.longest_book.cover} alt={this.props.longest_book.title}/></a>
+                                </div>
                                 <p><b><i>{this.props.longest_book.title}</i></b><br/>{this.props.longest_book.author}</p>
+                            </div>
+                            <div className="info flexing">
                                 <p className="section-title">&#9632; Longest Book &#9632;</p>
                                 <p>{this.props.longest_book.num_pages} pages</p>
                             </div>
@@ -113,6 +142,7 @@ class PagesPage extends Component {
                     <div className="pages-graph-wrapper flexing">
                         <div className="pages-graph-border flexing">
                             {this.pagesChart(this.props.year, this.props.all_years, this.props.pages_per_year)}
+                            <h2>Total pages read per year</h2>
                         </div>
                     </div>
                 </div>
@@ -131,14 +161,12 @@ class StarsPage extends Component {
             ratings[rating-1]++;
         }
 
-        for(var i=5; i>0; i--){
-            data.push( { 'rating':i, 'count':ratings[i-1] } );
+        for(var j=5; j>0; j--){
+            data.push( { 'rating':j + ' stars', 'count':ratings[j-1] } );
         }
 
-        console.log(data);
-
         return (
-            <div className="stars-graph flexing">
+            <div className="stars-graph">
                 <ResponsiveContainer>
                     <ComposedChart layout='vertical' data={data}>
                         <XAxis type='number' stroke='#EFCEBF' />
@@ -148,6 +176,25 @@ class StarsPage extends Component {
                 </ResponsiveContainer>
             </div>
         );
+    }
+
+    componentDidUpdate(){
+        var sg = document.getElementsByClassName("stars-graph")[0]
+
+        var axisLines = sg.querySelectorAll(".recharts-cartesian-axis-line");
+        for (var i = axisLines.length - 1; i >= 0; i--){
+            axisLines[i].remove();
+        }
+
+        var tickLines = sg.querySelectorAll(".recharts-cartesian-axis-tick-line");
+        for (var j = tickLines.length - 1; j >= 0; j--){
+            tickLines[j].remove();
+        }
+
+        var xAxisTicks = sg.querySelectorAll(".xAxis .recharts-cartesian-axis-tick");
+        for (var k = xAxisTicks.length - 1; k >= 0; k--){
+            xAxisTicks[k].remove();
+        }
     }
 
     render() {
@@ -162,10 +209,14 @@ class StarsPage extends Component {
                 <div className="background-section-wrapper highest-rated-wrapper">
                     <div className="highest-rated-content flexing">
                         <div className="highest-rated flexing">
-                            <a href={this.props.highest_rated.gr_link}><img src={this.props.highest_rated.cover} alt={this.props.highest_rated.title}/></a>
-                            <p><b><i>{this.props.highest_rated.title}</i></b><br/>{this.props.highest_rated.author}</p>
-                            <p className="section-title">&#9632; Highest Rated on Goodreads &#9632;</p>
-                            <p>Average rating {this.props.highest_rated.avg_rating} &#9733;<br/>{Number(this.props.highest_rated.num_reads).toLocaleString()} ratings</p>
+                            <div className="highest-rated-book">
+                                <a href={this.props.highest_rated.gr_link}><img src={this.props.highest_rated.cover} alt={this.props.highest_rated.title}/></a>
+                                <p><b><i>{this.props.highest_rated.title}</i></b><br/>{this.props.highest_rated.author}</p>
+                            </div>
+                            <div className="highest-rated-info">
+                                <h2>&#9632; Highest Rated on Goodreads &#9632;</h2>
+                                <p>Average rating {this.props.highest_rated.avg_rating} &#9733;<br/>{Number(this.props.highest_rated.num_reads).toLocaleString()} ratings</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -231,6 +282,7 @@ class CoversPage extends Component {
 class YearPage extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             'user_id' : '',
             'user_name' : '',
@@ -252,7 +304,7 @@ class YearPage extends Component {
         }
     }
 
-    componentDidMount() {
+    setAllData(){
         let current_year = this.props.match.params.current_year;
         let user_data = JSON.parse(sessionStorage.getItem('user_data'));
         // sidebar
@@ -282,6 +334,18 @@ class YearPage extends Component {
         this.setState( { 'least_popular' : current_year_data['least_read_book'] } );
         // covers page
         this.setState( { 'books' : current_year_data['reviews'] } );
+    }
+
+    componentDidMount() {
+        this.setAllData();
+    }
+
+    componentDidUpdate(prevProps){
+        var prevYear = prevProps.match.params.current_year;
+        var thisYear = this.props.match.params.current_year;
+        if(prevYear !== thisYear) {
+            this.setAllData();
+        }
     }
 
     render() {
