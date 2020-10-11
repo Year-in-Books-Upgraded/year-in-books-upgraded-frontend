@@ -1,4 +1,4 @@
-# year-in-books-upgraded
+# year-in-books-upgraded (Frontend)
 a redesign and upgrade of Goodreads' Year in Books, including more detailed tracking + book recommendations, using the Goodreads API
 
 ### Design concept
