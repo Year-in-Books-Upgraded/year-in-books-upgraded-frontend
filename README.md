@@ -1,5 +1,7 @@
 # year-in-books-upgraded (Frontend)
-a redesign and upgrade of Goodreads' Year in Books, including more detailed tracking + book recommendations, using the Goodreads API
+a redesign of Goodreads' Year in Books using the Goodreads API
+
+the backend is stored in [this repo](https://github.com/emilywritescode/year-in-books-upgraded-backend/tree/main)
 
 ### Design concept
 ![Color palette](mockups/color_palette.svg)
