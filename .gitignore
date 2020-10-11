@@ -1,4 +1,2 @@
 .env
-**/**.xml
 **/.DS_Store
-**/__pycache__
