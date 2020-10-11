@@ -57,3 +57,7 @@ def get_user_data(user_id):
 @app.route('/api/test')
 def test_ping():
     return 'Hello World!'
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
