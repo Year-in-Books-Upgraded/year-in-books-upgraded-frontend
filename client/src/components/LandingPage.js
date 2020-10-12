@@ -6,7 +6,10 @@ import goodreads_logo from '../images/goodreads_logo.png';
 
 import { LoadingPage } from './Handling.js'
 
+require('dotenv').config();
+
 class LandingPage extends Component {
+
 
     constructor(props) {
         super(props);
@@ -27,7 +30,8 @@ class LandingPage extends Component {
 
     handleSubmit(event){
         this.setState({loading : true});
-        axios.get('/api/getuserdata/' + this.state.user_id)
+        var api_url = process.env.REACT_APP_BACKEND + '/api/getuserdata/' + this.state.user_id
+        axios.get(api_url)
             .then(response => {
                 sessionStorage.setItem('user_data', JSON.stringify(response.data));
                 console.log(response.data);
