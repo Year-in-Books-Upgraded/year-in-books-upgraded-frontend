@@ -1,9 +1,6 @@
 {
-  "short_name": "Year in Books Upgraded",
+  "short_name": "YIBU",
   "name": "Year in Books Upgraded",
-  "icons": [],
   "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "display": "standalone"
 }
