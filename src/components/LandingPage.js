@@ -9,8 +9,6 @@ import { LoadingPage } from './Handling.js'
 require('dotenv').config();
 
 class LandingPage extends Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -31,6 +29,7 @@ class LandingPage extends Component {
     handleSubmit(event){
         this.setState({loading : true});
         var api_url = process.env.REACT_APP_BACKEND + '/api/getuserdata/' + this.state.user_id
+
         axios.get(api_url)
             .then(response => {
                 sessionStorage.setItem('user_data', JSON.stringify(response.data));
@@ -38,21 +37,19 @@ class LandingPage extends Component {
                 this.setState({loading : false});
                 this.setState({data_fetched : true});
             })
-            .catch(error => {
-                setTimeout(() => {
-                    this.setState({loading : false});
-                    this.setState({error : true});
+            .catch(error =>
+                {
                     var error_msg = error.response.data;
                     if(error_msg.includes('read book')) {
-                        this.setState({error_type : 2});
+                        this.setState({loading : false , error : true, error_type : 2});
                     } else if(error_msg.includes('invalid')) {
-                        this.setState({error_type : 1});
+                        this.setState({loading : false , error : true, error_type : 1});
                     } else {
-                        this.setState({error_type : 3});
+                        this.setState({loading : false , error : true, error_type : 3});
                     }
-                }, 2000);
+                }
+            );
 
-            });
         event.preventDefault();
     }
 
