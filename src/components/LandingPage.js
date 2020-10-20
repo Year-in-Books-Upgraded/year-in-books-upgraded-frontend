@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import ReactTooltip from 'react-tooltip';
 
 import goodreads_logo from '../images/goodreads_logo.png';
 
@@ -33,7 +36,7 @@ class LandingPage extends Component {
         axios.get(api_url)
             .then(response => {
                 sessionStorage.setItem('user_data', JSON.stringify(response.data));
-                console.log(response.data);
+                // console.log(response.data);
                 this.setState({loading : false});
                 this.setState({data_fetched : true});
             })
@@ -82,7 +85,8 @@ class LandingPage extends Component {
                                 <img alt="Goodreads logo icon" className="goodreads-logo" src={goodreads_logo}/>
                                 <form onSubmit={this.handleSubmit}>
                                     <label>
-                                        Enter your Goodreads ID
+                                        Enter your Goodreads ID &nbsp; <FontAwesomeIcon icon={faInfoCircle} data-tip data-for="id-tooltip" />
+                                        <ReactTooltip id="id-tooltip" place="right">Goodreads IDs are numbers.<br/>They can be found in the URL when visiting a member's profile page.<br/>For example, my Goodreads profile page URL is:<br/>https://www.goodreads.com/user/show/32647477-emily.<br/>My Goodreads ID would be 32647477.</ReactTooltip>
                                         <input type="text" value={this.state.user_id} onChange={this.handleUserID}/>
                                     </label>
                                     <input type="submit" value="Fetch my data!" onClick={this.handleSubmit} />

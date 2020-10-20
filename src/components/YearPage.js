@@ -78,7 +78,7 @@ class PagesPage extends Component {
                         <Bar dataKey='pages'>
                             {
                                 data.map((entry) => (
-                                    <Cell fill={entry['year']===current_year.toString() ? '#DAA993' : '#5A5751'} />
+                                    <Cell key={entry['year']} fill={entry['year']===current_year.toString() ? '#DAA993' : '#5A5751'} />
                                 ))
                             }
                         </Bar>
@@ -214,7 +214,7 @@ class StarsPage extends Component {
                                 <p><b><i>{this.props.highest_rated.title}</i></b><br/>{this.props.highest_rated.author}</p>
                             </div>
                             <div className="highest-rated-info">
-                                <h2>&#9632; Highest Rated on Goodreads &#9632;</h2>
+                                <h2>&#9632; Highest Rated on<br/>Goodreads &#9632;</h2>
                                 <p>Average rating {this.props.highest_rated.avg_rating} &#9733;<br/>{Number(this.props.highest_rated.num_reads).toLocaleString()} ratings</p>
                             </div>
                         </div>
@@ -265,13 +265,14 @@ class CoversPage extends Component {
                 <div className="covers-wrapper flexing">
                     <div className="covers-grid">
                         { this.props.books.filter(book => !book.cover.includes('nophoto')).map(book =>
-                              <div className="image-container">
+                              <div className="image-container" key={book.title}>
                                   <a href={book.gr_link} title={book.title + ' by ' + book.author}><img src={ book.cover } alt= { book.title } /></a>
                               </div>
                           )
                         }
                     </div>
-                    <h3 className="shelf-link"><a href={"https://www.goodreads.com/review/list?id="+ this.props.user_id + "&shelf=read&sort=date_read&read_at=" + this.props.year}>See all of the books you've read in {this.props.year}!</a></h3>
+                    <h3 className="shelf-link"><a href={"https://www.goodreads.com/review/list?id="+ this.props.user_id + "&shelf=read&sort=date_read&read_at=" + this.props.year}>&#9632; See all of the books you've read in {this.props.year}! &#9632;</a></h3>
+                    <p className="attribution">All data sourced from <a href="https://www.goodreads.com">Goodreads.com</a>.</p>
                 </div>
             </div>
         );
